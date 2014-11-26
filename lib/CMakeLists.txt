@@ -1,2 +1,2 @@
-set( SRC "lib.cpp")
+set( SRC lib.cpp)
 build_lib(lib SOURCES ${SRC})

@@ -21,7 +21,7 @@ endmacro()
 
 macro(build_exe MODULE_NAME)
 
-	parse_argument_list("MODULE" "SOURCES;LIBS;FORMS" "${ARGN}")
+	parse_argument_list("MODULE" "SOURCES;HEADERS;LIBS;FORMS" "${ARGN}")
 
 	project(${MODULE_NAME})
 	set(MODULE_DIR "${PROJECT_SOURCE_DIR}")
@@ -44,7 +44,7 @@ macro(build_exe MODULE_NAME)
 	endif()
 
 
-	add_executable(${PROJECT_NAME}  ${MODULE_SOURCES} ${UI_HEADERS})
+	add_executable(${PROJECT_NAME}  ${MODULE_SOURCES} ${MODULE_HEADERS} ${UI_HEADERS})
 	set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${MODULE_NAME})
 	target_link_libraries(${PROJECT_NAME} Qt5::Widgets Qt5::WebSockets )
 
@@ -61,21 +61,21 @@ endmacro()
 
 macro(build_lib MODULE_NAME)
 
-	parse_argument_list("MODULE" "SOURCES;LIBS" "${ARGN}")
+	parse_argument_list("MODULE" "SOURCES;HEADERS;LIBS" "${ARGN}")
 
 	project(${MODULE_NAME})
 	set(MODULE_DIR "${PROJECT_SOURCE_DIR}")
 
-	message( STATUS " module dir -> ${MODULE_DIR}")
 
-	if(EXISTS "${MODULE_DIR}/config.h.in")
-		configure_file ("${MODULE_DIR}/config.h.in"	"${PROJECT_BINARY_DIR}/config.h")
+	if(EXISTS "${MODULE_DIR}/libconfig.h.in")
+		configure_file ("${MODULE_DIR}/libconfig.h.in"	"${PROJECT_BINARY_DIR}/libconfig.h")
 	endif()
 
 	include_directories("${PROJECT_BINARY_DIR}")
 
-	add_library(${PROJECT_NAME}  ${MODULE_SOURCES})
+	add_library(${PROJECT_NAME}  ${MODULE_SOURCES} ${MODULE_HEADERS})
 	set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${MODULE_NAME})
+	target_link_libraries(${PROJECT_NAME} Qt5::Widgets Qt5::WebSockets )
 
 	if(MODULE_LIBS)
 
