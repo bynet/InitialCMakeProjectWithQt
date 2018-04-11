@@ -7,4 +7,8 @@ set( SRC main.cpp MainWindow.cpp)
 set( LIB lib)
 set( FORM mainwindow.ui dlg.ui)
 
+
 build_exe(app SOURCES ${SRC} LIBS ${LIB} FORMS ${FORM} )
+
+
+qt5_copy_dlls(app "Core;Widgets;Gui;WebSockets")
